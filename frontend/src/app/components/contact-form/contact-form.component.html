@@ -1,0 +1,90 @@
+<div class="form-container">
+    <div class="form-wrapper glass-card scale-in">
+        <!-- Header -->
+        <div class="form-header">
+            <h1>{{ isEditMode ? 'Edit Contact' : 'Add New Contact' }}</h1>
+            <p>{{ isEditMode ? 'Update contact information' : 'Fill in the details below' }}</p>
+        </div>
+
+        <!-- Success Message -->
+        <div *ngIf="success" class="success-message fade-in">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            <span>Contact {{ isEditMode ? 'updated' : 'created' }} successfully!</span>
+        </div>
+
+        <!-- Error Message -->
+        <div *ngIf="error" class="error-banner fade-in">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+            <span>{{ error }}</span>
+        </div>
+
+        <!-- Form -->
+        <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="contact-form">
+
+            <!-- Name Field -->
+            <div class="input-group">
+                <label for="name">Full Name *</label>
+                <input id="name" type="text" formControlName="name" class="input-field"
+                    [class.input-error]="f['name'].invalid && f['name'].touched" placeholder="John Doe" />
+                <div *ngIf="f['name'].invalid && f['name'].touched" class="error-message">
+                    <span *ngIf="f['name'].errors?.['required']">Name is required</span>
+                    <span *ngIf="f['name'].errors?.['minlength']">Name must be at least 2 characters</span>
+                </div>
+            </div>
+
+            <!-- Email Field -->
+            <div class="input-group">
+                <label for="email">Email Address *</label>
+                <input id="email" type="email" formControlName="email" class="input-field"
+                    [class.input-error]="f['email'].invalid && f['email'].touched" placeholder="john.doe@example.com" />
+                <div *ngIf="f['email'].invalid && f['email'].touched" class="error-message">
+                    <span *ngIf="f['email'].errors?.['required']">Email is required</span>
+                    <span *ngIf="f['email'].errors?.['email']">Please enter a valid email address</span>
+                </div>
+            </div>
+
+            <!-- Phone Field -->
+            <div class="input-group">
+                <label for="phone">Phone Number *</label>
+                <input id="phone" type="tel" formControlName="phone" class="input-field"
+                    [class.input-error]="f['phone'].invalid && f['phone'].touched" placeholder="+1 (555) 123-4567" />
+                <div *ngIf="f['phone'].invalid && f['phone'].touched" class="error-message">
+                    <span *ngIf="f['phone'].errors?.['required']">Phone number is required</span>
+                    <span *ngIf="f['phone'].errors?.['pattern']">Please enter a valid phone number</span>
+                </div>
+            </div>
+
+            <!-- Form Actions -->
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary" (click)="cancel()" [disabled]="loading">
+                    Cancel
+                </button>
+
+                <button type="submit" class="btn btn-primary" [disabled]="loading || success">
+                    <span *ngIf="!loading">{{ isEditMode ? 'Update Contact' : 'Add Contact' }}</span>
+                    <span *ngIf="loading" class="loading-text">
+                        <div class="spinner-small"></div>
+                        Saving...
+                    </span>
+                </button>
+            </div>
+        </form>
+
+        <!-- Back Link -->
+        <div class="back-link">
+            <a routerLink="/" class="link-with-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                Back to contacts
+            </a>
+        </div>
+    </div>
+</div>
